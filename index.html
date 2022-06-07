@@ -1,0 +1,82 @@
+<html>
+	<body>
+		<div id='loginPage'>
+			<input id='username'>
+			<input id='password'>
+			<button id='login'>Login</button>
+		</div>
+		
+		<div id='votePage' style='display:none'>
+			
+			<button id='update'>Update</button>
+		</div>
+		
+		<script>
+			async function getData(name) {
+						var options = {
+							method: 'POST',
+							headers: {
+								"Content-Type": "application/json"
+							},
+							body: JSON.stringify({
+								name: name
+							})
+						};
+						var response = await fetch('/read', options);
+						var data = await response.json();
+						return data;
+			}
+			async function updateData(name, info) {
+						var options = {
+							method: 'POST',
+							headers: {
+								"Content-Type": "application/json"
+							},
+							body: JSON.stringify({
+								name: name,
+								info: info
+							})
+						};
+						var response = await fetch('/update', options);
+						var data = await response.json();
+						return data;
+			}
+
+			document.getElementById('login').addEventListener('click', async function() {
+				var options = {
+							method: 'POST',
+							headers: {
+								"Content-Type": "application/json"
+							},
+							body: JSON.stringify({
+								username: document.getElementById('username').value,
+								password: document.getElementById('password').value
+							})
+						};
+						var response = await fetch('/login', options);	
+						var data = await response.json();
+						console.log(data.success);
+						if (data.success === true) {
+							document.getElementById('loginPage').style.display = 'none';				
+							document.getElementById('votePage').style.display = 'block';	
+						}
+			});
+
+			document.getElementById('update').addEventListener('click', async function() {
+				var options = {
+							method: 'POST',
+							headers: {
+								"Content-Type": "application/json"
+							},
+							body: JSON.stringify({
+								data: [{rating: 1}]	
+							})
+						};
+						var response = await fetch('/vote', options);	
+						var data = await response.json();
+						console.log(data.success);
+			});
+			
+		</script>
+	</body>
+</html>
