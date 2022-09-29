@@ -57,7 +57,7 @@ app.post('/read', async function(req, res) {
 	if (client) {
 		var doc = await readDoc(await client.connect(), name);
 		console.log(doc)
-		res.send(doc);
+		res.json(doc);
 	}
 });
 
