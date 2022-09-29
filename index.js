@@ -51,7 +51,7 @@ async function createDoc(client, newDoc) {
 	await client.db('test').collection('posts').insertOne(newDoc);
 }
 
-app.post('/read', async function(req, res) {
+app.get('/read', async function(req, res) {
 	var { name } = req.body;
 	if (client) {
 		var doc = await readDoc(await client.connect(), name);
@@ -59,7 +59,7 @@ app.post('/read', async function(req, res) {
 	}
 });
 
-app.post('/create', async function(req, res) {
+app.get('/create', async function(req, res) {
 	var { info } = req.body;
 	if (client) {
 		await createDoc(await client.connect(), info);
@@ -67,7 +67,7 @@ app.post('/create', async function(req, res) {
 	}
 });
 
-app.post('/upDate', async function(req, res) {
+app.get('/upDate', async function(req, res) {
 	var { name, info } = req.body;
 	if (client) {
 		await updateDoc(await client.connect(), name, info);
@@ -75,7 +75,7 @@ app.post('/upDate', async function(req, res) {
 	}
 });
 
-app.post('/login', function(req, res) {
+app.get('/login', function(req, res) {
 	var { username, password } = 	req.body;
 	if (usernames.includes(username) && passwords.includes(password)) {
 		res.send({success: true});
@@ -84,7 +84,7 @@ app.post('/login', function(req, res) {
 	}
 });
 
-app.post('/vote', async function(req, res) {
+app.get('/vote', async function(req, res) {
 	var { data } = req.body;
 	if (client) {
 		var people = await readDoc(await client.connect(), "people");
