@@ -3,6 +3,7 @@ const app = express();
 const {MongoClient} = require('mongodb');
 const path = require('path');
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static('public'));
 app.use(express.json());
 var client;
 var uri = "mongodb+srv://voteme:Sweatpeaandlando@cluster0.cdqqm.mongodb.net/?retryWrites=true&w=majority";
@@ -51,15 +52,16 @@ async function createDoc(client, newDoc) {
 	await client.db('test').collection('posts').insertOne(newDoc);
 }
 
-app.get('/read', async function(req, res) {
+app.post('/read', async function(req, res) {
 	var { name } = req.body;
 	if (client) {
 		var doc = await readDoc(await client.connect(), name);
+		console.log(doc)
 		res.send(doc);
 	}
 });
 
-app.get('/create', async function(req, res) {
+app.post('/create', async function(req, res) {
 	var { info } = req.body;
 	if (client) {
 		await createDoc(await client.connect(), info);
@@ -67,7 +69,7 @@ app.get('/create', async function(req, res) {
 	}
 });
 
-app.get('/upDate', async function(req, res) {
+app.post('/upDate', async function(req, res) {
 	var { name, info } = req.body;
 	if (client) {
 		await updateDoc(await client.connect(), name, info);
@@ -75,7 +77,7 @@ app.get('/upDate', async function(req, res) {
 	}
 });
 
-app.get('/login', function(req, res) {
+app.post('/login', function(req, res) {
 	var { username, password } = 	req.body;
 	if (usernames.includes(username) && passwords.includes(password)) {
 		res.send({success: true});
@@ -84,7 +86,7 @@ app.get('/login', function(req, res) {
 	}
 });
 
-app.get('/vote', async function(req, res) {
+app.post('/vote', async function(req, res) {
 	var { data } = req.body;
 	if (client) {
 		var people = await readDoc(await client.connect(), "people");
@@ -97,7 +99,7 @@ app.get('/vote', async function(req, res) {
 	}
 });
 
-app.get("/", async (req, res) => {
+app.post("/", async (req, res) => {
   res.sendFile(path.join(__dirname, '/index.html'));
 });
 
