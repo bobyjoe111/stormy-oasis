@@ -56,7 +56,7 @@ app.post('/read', async function(req, res) {
 	var { name } = req.body;
 	if (client) {
 		var doc = await readDoc(await client.connect(), name);
-		console.log(doc)
+		console.log(doc);
 		res.json(doc);
 	}
 });
@@ -65,7 +65,7 @@ app.post('/create', async function(req, res) {
 	var { info } = req.body;
 	if (client) {
 		await createDoc(await client.connect(), info);
-		res.send({success: true});
+		res.json({success: true});
 	}
 });
 
@@ -73,16 +73,16 @@ app.post('/upDate', async function(req, res) {
 	var { name, info } = req.body;
 	if (client) {
 		await updateDoc(await client.connect(), name, info);
-		res.send({success: true});
+		res.json({success: true});
 	}
 });
 
 app.post('/login', function(req, res) {
 	var { username, password } = 	req.body;
 	if (usernames.includes(username) && passwords.includes(password)) {
-		res.send({success: true});
+		res.json({success: true});
 	} else {
-		res.send({success: false});
+		res.json({success: false});
 	}
 });
 
@@ -95,11 +95,11 @@ app.post('/vote', async function(req, res) {
 			people[i].rating += data[i].rating;
 		}
 		await updateDoc(await client.connect(), 'people', {people: people});
-		res.send({success: true});
+		res.json({success: true});
 	}
 });
 
-app.post("/", async (req, res) => {
+app.get("/", async (req, res) => {
   res.sendFile(path.join(__dirname, '/index.html'));
 });
 
